@@ -49,7 +49,7 @@ class User_API():
         # Check which user has the specific email
         user_with_target_email = self.db.session.query(Users).filter_by(user_email=email).first()
         if user_with_target_email:
-            return user_with_target_email[0]
+            return user_with_target_email
         else:
             return None
     
@@ -80,15 +80,17 @@ class User_API():
         return new_user.as_dict()
 
     # Function to update user data by user_id
-    def update_user(self, old_username, new_username, new_email, new_college):
+    def update_user(self, old_username, old_password, new_username, new_email, new_password):
         try:
             # Query the database to find the user by user_id
             user =self.get_user_by_username(old_username)
+            # Also need to check the password too
+            # old_password
             if user:
                 # Update the user data with the new values
                 user.user_name = new_username
                 user.user_email = new_email
-                user.university_id = new_college
+                user.user_password = new_password
 
                 # Commit the changes to the database
                 self.db.session.commit()

@@ -8,9 +8,9 @@ from studyspots.studyspots import StudySpots_API
 
 # Create a SQLAlchemy engine and connect to your database
 user = "postgres"
-password = "1234"
+password = ""
 hostname = "127.0.0.1:5432"
-database_name = "test"
+database_name = "test3"
 port = "5432"
 DATABASE_URI = f"postgresql://{user}:{password}@{hostname}/{database_name}"
 
@@ -181,12 +181,12 @@ def update_user():
         # Extract user_id and other updated fields from the data
         # user_id = int(data.get('user_id'))
         current_username = data.get('current_username')
+        current_password = data.get('current_password')
         new_username = data.get('new_username')
-        new_email = data.get('email')
-        new_college = data.get('college')
+        new_email = data.get('new_email')
 
         # Update the user's data in the database
-        user = users_instance.update_user(current_username, new_username, new_email, new_college)
+        user = users_instance.update_user(current_username, current_password, new_username, new_email)
         if user:
             # User data updated successfully
             return jsonify({'message': 'User data updated successfully'})
@@ -215,7 +215,7 @@ def check_username_availability():
     return jsonify({'taken': user is not None})
 
 # API route to check if an email is taken
-@app.route('/api/check-email', methods=['GET', 'POST', 'OPTIONS'])
+@app.route('/api/check-email', methods=['POST'])
 @cross_origin()
 def check_email_availability():
     data = request.json  # Get the JSON data from the request
